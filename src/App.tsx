@@ -1,10 +1,11 @@
 import './App.css';
+import Building from './components/Building';
 
 function App() {
   return (
-    <div>
+    <div className="App">
       <h1>Elevator Simulator 🚀</h1>
-      <p>Build successful! ✅</p>
+      <Building />
     </div>
   );
 }

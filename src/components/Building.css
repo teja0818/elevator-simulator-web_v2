@@ -1,0 +1,15 @@
+.building {
+    position: relative;
+    width: 140px;
+    height: 500px;
+    background: #f0f0f0;
+    border: 2px solid #ccc;
+    margin: 20px auto;
+    overflow: hidden;
+  }
+  
+  .controls {
+    margin-top: 20px;
+    text-align: center;
+  }
+  
