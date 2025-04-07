@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Elevator from './Elevator';
 import './Building.css';
 
@@ -7,33 +7,42 @@ const NUM_FLOORS = 5;
 const Building: React.FC = () => {
   const [calls, setCalls] = useState<number[]>([]);
   const [elevatorFloor, setElevatorFloor] = useState(0);
-  const [moving, setMoving] = useState(false);
+  const movingRef = useRef(false);
+  const callsRef = useRef<number[]>([]);
+
+  // Sync refs with state
+  useEffect(() => {
+    callsRef.current = calls;
+  }, [calls]);
 
   const callElevator = (floor: number) => {
-    if (!calls.includes(floor)) {
-      setCalls((prev) => [...prev, floor]);
+    if (!callsRef.current.includes(floor)) {
+      const newCalls = [...callsRef.current, floor];
+      setCalls(newCalls);
     }
   };
 
   useEffect(() => {
-    if (moving || calls.length === 0) return;
+    if (movingRef.current || callsRef.current.length === 0) return;
 
-    setMoving(true);
-    const interval = setInterval(() => {
+    movingRef.current = true;
+    const moveInterval = setInterval(() => {
+      const target = callsRef.current[0];
       setElevatorFloor((prev) => {
-        const target = calls[0];
         if (prev === target) {
-          setCalls((c) => c.slice(1));
-          clearInterval(interval);
-          setMoving(false);
+          // Arrived
+          const remaining = callsRef.current.slice(1);
+          setCalls(remaining);
+          clearInterval(moveInterval);
+          movingRef.current = false;
           return prev;
         }
         return target > prev ? prev + 1 : prev - 1;
       });
-    }, 1000); // Move one floor every second
+    }, 1000);
 
-    return () => clearInterval(interval);
-  }, [calls, moving]);
+    return () => clearInterval(moveInterval);
+  }, [calls, elevatorFloor]);
 
   return (
     <div className="building">
