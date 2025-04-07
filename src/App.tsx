@@ -1,13 +1,12 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import './App.css';
 
 function App() {
   return (
     <div>
       <h1>Elevator Simulator 🚀</h1>
+      <p>Build successful! ✅</p>
     </div>
   );
 }
+
 export default App;
