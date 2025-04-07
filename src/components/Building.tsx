@@ -32,7 +32,6 @@ const Building: React.FC = () => {
           clearInterval(interval);
           return current;
         }
-
         return targetFloor > current ? current + 1 : current - 1;
       });
     }, 1000);
@@ -42,15 +41,12 @@ const Building: React.FC = () => {
 
   return (
     <div className="building">
-      {[...Array(NUM_FLOORS)].reverse().map((_, i) => {
-        const floor = i;
-        return (
-          <div className="floor" key={floor}>
-            <button onClick={() => callElevator(floor)}>Call 🛗</button>
-            <span className="floor-label">Floor {floor}</span>
-          </div>
-        );
-      })}
+      {Array.from({ length: NUM_FLOORS }, (_, floor) => (
+        <div className="floor" key={floor}>
+          <button onClick={() => callElevator(NUM_FLOORS - 1 - floor)}>Call 🛗</button>
+          <span className="floor-label">Floor {NUM_FLOORS - 1 - floor}</span>
+        </div>
+      ))}
       <Elevator floor={elevatorFloor} />
     </div>
   );

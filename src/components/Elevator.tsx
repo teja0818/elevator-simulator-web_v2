@@ -2,7 +2,7 @@ import React from 'react';
 import './Elevator.css';
 
 type ElevatorProps = {
-  floor: number; // 0 is ground floor
+  floor: number;
 };
 
 const Elevator: React.FC<ElevatorProps> = ({ floor }) => {
