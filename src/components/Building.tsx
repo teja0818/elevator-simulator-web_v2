@@ -44,15 +44,12 @@ const Building: React.FC = () => {
 
   return (
     <div className="building">
-      {[...Array(NUM_FLOORS)].map((_, i) => {
-        const floor = NUM_FLOORS - 1 - i;
-        return (
-          <div className="floor" key={floor}>
-            <button onClick={() => callElevator(floor)}>Call 🛗</button>
-            <span className="floor-label">Floor {floor}</span>
-          </div>
-        );
-      })}
+      {[...Array(NUM_FLOORS)].map((_, floor) => (
+        <div className="floor" key={floor}>
+          <button onClick={() => callElevator(floor)}>Call 🛗</button>
+          <span className="floor-label">Floor {floor}</span>
+        </div>
+      )).reverse()}
       <Elevator floor={elevatorFloor} />
     </div>
   );
