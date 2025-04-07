@@ -16,7 +16,6 @@ const Building: React.FC = () => {
   };
 
   useEffect(() => {
-    // If not already heading somewhere, set the next target
     if (targetFloor === null && calls.length > 0) {
       setTargetFloor(calls[0]);
     }
@@ -28,7 +27,6 @@ const Building: React.FC = () => {
     const interval = setInterval(() => {
       setElevatorFloor((current) => {
         if (current === targetFloor) {
-          // Arrived at destination
           setCalls((prevCalls) => prevCalls.filter((f) => f !== targetFloor));
           setTargetFloor(null);
           clearInterval(interval);
@@ -44,12 +42,15 @@ const Building: React.FC = () => {
 
   return (
     <div className="building">
-      {[...Array(NUM_FLOORS)].map((_, floor) => (
-        <div className="floor" key={floor}>
-          <button onClick={() => callElevator(floor)}>Call 🛗</button>
-          <span className="floor-label">Floor {floor}</span>
-        </div>
-      )).reverse()}
+      {[...Array(NUM_FLOORS)].reverse().map((_, i) => {
+        const floor = i;
+        return (
+          <div className="floor" key={floor}>
+            <button onClick={() => callElevator(floor)}>Call 🛗</button>
+            <span className="floor-label">Floor {floor}</span>
+          </div>
+        );
+      })}
       <Elevator floor={elevatorFloor} />
     </div>
   );
