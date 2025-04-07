@@ -1,15 +1,25 @@
 .building {
-    position: relative;
-    width: 140px;
-    height: 500px;
-    background: #f0f0f0;
-    border: 2px solid #ccc;
-    margin: 20px auto;
-    overflow: hidden;
-  }
-  
-  .controls {
-    margin-top: 20px;
-    text-align: center;
-  }
-  
+  position: relative;
+  width: 200px;
+  height: 500px;
+  border: 2px solid #ccc;
+  margin: 40px auto;
+  background-color: #f9f9f9;
+  display: flex;
+  flex-direction: column-reverse;
+}
+
+.floor {
+  position: relative;
+  height: 100px;
+  border-top: 1px solid #aaa;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 10px;
+}
+
+.floor-label {
+  font-size: 14px;
+  color: #333;
+}
