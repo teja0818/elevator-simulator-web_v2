@@ -1,48 +1,46 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import Elevator from './Elevator';
 import './Building.css';
 
 const NUM_FLOORS = 5;
 
 const Building: React.FC = () => {
-  const [calls, setCalls] = useState<number[]>([]);
   const [elevatorFloor, setElevatorFloor] = useState(0);
-  const movingRef = useRef(false);
-  const callsRef = useRef<number[]>([]);
-
-  // Sync refs with state
-  useEffect(() => {
-    callsRef.current = calls;
-  }, [calls]);
+  const [calls, setCalls] = useState<number[]>([]);
+  const [targetFloor, setTargetFloor] = useState<number | null>(null);
 
   const callElevator = (floor: number) => {
-    if (!callsRef.current.includes(floor)) {
-      const newCalls = [...callsRef.current, floor];
-      setCalls(newCalls);
+    if (!calls.includes(floor)) {
+      setCalls((prev) => [...prev, floor]);
     }
   };
 
   useEffect(() => {
-    if (movingRef.current || callsRef.current.length === 0) return;
+    // If not already heading somewhere, set the next target
+    if (targetFloor === null && calls.length > 0) {
+      setTargetFloor(calls[0]);
+    }
+  }, [calls, targetFloor]);
 
-    movingRef.current = true;
-    const moveInterval = setInterval(() => {
-      const target = callsRef.current[0];
-      setElevatorFloor((prev) => {
-        if (prev === target) {
-          // Arrived
-          const remaining = callsRef.current.slice(1);
-          setCalls(remaining);
-          clearInterval(moveInterval);
-          movingRef.current = false;
-          return prev;
+  useEffect(() => {
+    if (targetFloor === null) return;
+
+    const interval = setInterval(() => {
+      setElevatorFloor((current) => {
+        if (current === targetFloor) {
+          // Arrived at destination
+          setCalls((prevCalls) => prevCalls.filter((f) => f !== targetFloor));
+          setTargetFloor(null);
+          clearInterval(interval);
+          return current;
         }
-        return target > prev ? prev + 1 : prev - 1;
+
+        return targetFloor > current ? current + 1 : current - 1;
       });
     }, 1000);
 
-    return () => clearInterval(moveInterval);
-  }, [calls, elevatorFloor]);
+    return () => clearInterval(interval);
+  }, [targetFloor]);
 
   return (
     <div className="building">
